@@ -103,7 +103,8 @@ function Navbar() {
                  </a>
                  <ul className="dropdown-menu" aria-labelledby="adminDropdown">
                    <li>
-                     <Link to="/admin/donorInfo" className="dropdown-item">Donor Managment</Link>
+                     <Link to="/admin/donorInfo" className="dropdown-item">Donors Managment</Link>
+                     <Link to="/admin/doctor/all" className="dropdown-item">Doctors Mangment</Link>
                    </li>
                    {/* Add more admin options as needed */}
                  </ul>

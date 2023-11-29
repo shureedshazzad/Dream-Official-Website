@@ -10,6 +10,7 @@ import { notFound, errorHandler } from './middleware/errorMiddleware.js';
 import donorRoute from './routes/donorRoute.js';
 import uploadRoute from './routes/uploadRoute.js';
 import bloodRequestRoute from './routes/bloodRequestRoute.js'
+import doctorRoutes from  './routes/doctorRoutes.js'
 
 
 
@@ -38,6 +39,7 @@ app.get('/', (req, res) => {
 app.use('/api/donors', donorRoute); // donorRoute
 app.use('/api/upload', uploadRoute); // uploadRoute
 app.use('/api/publicbloodrequest',bloodRequestRoute);//public blood request
+app.use('/api/doctors',doctorRoutes);//doctor routes
 
 const __dirname = path.resolve(); // set __dirname to current directory
 app.use('/uploads', express.static(path.join(__dirname, '/uploads')));

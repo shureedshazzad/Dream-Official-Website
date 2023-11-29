@@ -29,6 +29,8 @@ import Otherbloodrequestsscreen from './screens/Otherbloodrequestsscreen.jsx';
 import Alldonors from './screens/Alldonors.jsx';
 import Publicblooddonationreqscreen from './screens/Publicblooddonationreqscreen.jsx';
 import BloodDonationForSpecificDonors from './screens/BloodDonationForSpecificDonors.jsx';
+import Createdoctorscreen from './screens/Adminscreen/Createdoctorscreen.jsx';
+import Showalldoctorscreen from './screens/Adminscreen/Showalldoctorscreen.jsx';
 
 
 
@@ -52,6 +54,8 @@ const router=createBrowserRouter(
       <Route path='' element={<AdminRoute/>}>
         <Route path='/admin/donorInfo' element={<Donorinfoscreen/>}/>
         <Route path='/admin/donor/:id/edit'  element={<Donoreditscreen/>}/>
+        <Route path='/admin/doctor/create' element={<Createdoctorscreen/>}/>
+        <Route path='/admin/doctor/all' element={<Showalldoctorscreen/>}/>
       </Route>
 
     </Route>

@@ -5,8 +5,6 @@ import Donor from "../models/donorModel.js";
 import PublicBloodReq from "../models/publicBloodReqModel.js";
 import generateToken from "../utils/generateToken.js";
 import TelegramBot from "node-telegram-bot-api";
-import crypto from "crypto";
-
 import nodemailer from 'nodemailer';
 import Mailgen from 'mailgen';
 
