@@ -47,7 +47,7 @@ function Goals() {
           </div>
           <div className="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.5s">
             <div className="service-item bg-light rounded h-100 p-5">
-              <div style={divStyle}>
+              <div style={circleStyle}>
                 <i className="fa fa-handshake text-danger fs-4"></i>
               </div>
               <h4 className="mb-3">Collaboration and Outreach</h4>
