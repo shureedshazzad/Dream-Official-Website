@@ -1,6 +1,23 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useGetDoctorByIdQuery } from '../slices/doctorsApiSlice';
+import { useCreateAppointmentMutation} from '../slices/appointmentApiSlice';
+import { toast } from 'react-toastify';
+import Loader from '../components/Loader';
+import { useParams } from 'react-router-dom';
+
 
 function Appointmentscreen() {
+
+  const { id: doctorId } = useParams();
+
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [patientMobileNumber, setPatientMobileNumber] = useState('');
+  const [patientProblem, setPatientProblem] = useState('');
+  const [loading, setLoading] = useState(false)
+
+
+
   return (
     <div className="container-xxl py-5">
       <div className="container">
