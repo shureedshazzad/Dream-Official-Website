@@ -34,6 +34,8 @@ import Showalldoctorscreen from './screens/Adminscreen/Showalldoctorscreen.jsx';
 import Doctoreditscreen from './screens/Adminscreen/Doctoreditscreen.jsx';
 import Alldoctors from './screens/Alldoctors.jsx';
 import Appointmentscreen from './screens/Appointmentscreen.jsx';
+import Allappointmentscreen from './screens/Adminscreen/Allappointmentscreen.jsx';
+import Appointmentinfoscreen from './screens/Adminscreen/Appointmentinfoscreen.jsx';
 
 
 
@@ -54,7 +56,7 @@ const router=createBrowserRouter(
       <Route path="/:id/create_send" element={<BloodDonationForSpecificDonors/>}/>
       <Route path="/doctors" element={<Alldoctors/>}/>
       <Route path="/doctors/appointment/:id" element={<Appointmentscreen/>}/>
-      
+   
 
       <Route path='' element={<AdminRoute/>}>
         <Route path='/admin/donorInfo' element={<Donorinfoscreen/>}/>
@@ -62,6 +64,8 @@ const router=createBrowserRouter(
         <Route path='/admin/doctor/create' element={<Createdoctorscreen/>}/>
         <Route path='/admin/doctor/all' element={<Showalldoctorscreen/>}/>
         <Route path='/admin/doctor/edit/:id' element={<Doctoreditscreen/>}/>
+        <Route path="/admin/appointment" element={<Allappointmentscreen/>}/>
+        <Route path="/admin/appointment/:id" element={<Appointmentinfoscreen/>}/>
       </Route>
 
     </Route>

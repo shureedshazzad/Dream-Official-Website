@@ -33,6 +33,19 @@ export const appointmentsApiSlice = apiSlice.injectEndpoints({
         }),
         invalidatesTags: ['Appointments'],
       }),
+
+
+
+      confirmAppointment: builder.mutation({
+        query: (appointmentId) => ({
+          url: `${APPOINTMENT_URL}/${appointmentId}`,
+          method: 'POST',
+        }),
+        invalidatesTags: ['Appointments'],
+      }),
+
+   
+
     }),
   });
   
@@ -41,4 +54,5 @@ export const appointmentsApiSlice = apiSlice.injectEndpoints({
     useGetAllAppointmentsQuery,
     useGetAppointmentByIdQuery,
     useDeleteAppointmentMutation,
+    useConfirmAppointmentMutation
   } = appointmentsApiSlice;

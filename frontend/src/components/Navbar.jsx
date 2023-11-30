@@ -105,6 +105,7 @@ function Navbar() {
                    <li>
                      <Link to="/admin/donorInfo" className="dropdown-item">Donors Managment</Link>
                      <Link to="/admin/doctor/all" className="dropdown-item">Doctors Mangment</Link>
+                     <Link to="/admin/appointment" className="dropdown-item">Appointment Managment</Link>
                    </li>
                    {/* Add more admin options as needed */}
                  </ul>
