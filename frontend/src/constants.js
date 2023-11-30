@@ -8,3 +8,4 @@ export const DONOR_URL = '/api/donors';
 export const UPLOAD_URL = '/api/upload';
 export const BLOOD_REQ_URL = '/api/publicbloodrequest';
 export const DOCTOR_URL = '/api/doctors';
+export const APPOINTMENT_URL = '/api/appointments';
