@@ -123,6 +123,7 @@ function Navbar() {
           {/*<a href="#goals" className="nav-item nav-link">Goals</a>
           <a href="#why-donate" className="nav-item nav-link">Why Donate Blood</a>
           <a href="#eligibility" className="nav-item nav-link">Pre-Donation</a>*/}
+          <a href="" className="nav-item nav-link">Doctor Appointments</a>
           <a href="" className="nav-item nav-link">Events And News</a>
           <li className="nav-item dropdown">
             <a className="nav-link dropdown-toggle" href="#" id="aboutUsDropdown" role a="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
