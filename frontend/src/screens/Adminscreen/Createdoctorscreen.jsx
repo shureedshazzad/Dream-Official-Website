@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import {useCreateDoctorMutation} from '../../slices/doctorsApiSlice.js';
 import { toast } from 'react-toastify';
 import Loader from '../../components/Loader';
-import { Navigate, useNavigate } from 'react-router-dom';
-import TimePicker from 'react-time-picker';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 function Createdoctorscreen() {
 
@@ -19,11 +18,11 @@ function Createdoctorscreen() {
 
   const [createDoctor, { isLoading }] = useCreateDoctorMutation();
 
+  const navigate = useNavigate();
 
-  const wideTimePickerStyle = {
-    width: '100%',
-    // Add any additional styles you need
-  };
+  const { search } = useLocation();
+  const sp = new URLSearchParams(search);
+  const redirect = sp.get('redirect') || '/admin/doctor/all';
 
 
 
@@ -57,7 +56,7 @@ function Createdoctorscreen() {
       console.log(res);
       toast.success('Doctor is created successfully');
       // Redirect to the appropriate page after doctor creation
-      
+      navigate(redirect);
     } catch (err) {
       console.error(err);
       toast.error('Failed to create doctor');

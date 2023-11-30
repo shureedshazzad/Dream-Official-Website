@@ -31,6 +31,7 @@ import Publicblooddonationreqscreen from './screens/Publicblooddonationreqscreen
 import BloodDonationForSpecificDonors from './screens/BloodDonationForSpecificDonors.jsx';
 import Createdoctorscreen from './screens/Adminscreen/Createdoctorscreen.jsx';
 import Showalldoctorscreen from './screens/Adminscreen/Showalldoctorscreen.jsx';
+import Doctoreditscreen from './screens/Adminscreen/Doctoreditscreen.jsx';
 
 
 
@@ -56,6 +57,7 @@ const router=createBrowserRouter(
         <Route path='/admin/donor/:id/edit'  element={<Donoreditscreen/>}/>
         <Route path='/admin/doctor/create' element={<Createdoctorscreen/>}/>
         <Route path='/admin/doctor/all' element={<Showalldoctorscreen/>}/>
+        <Route path='/admin/doctor/edit/:id' element={<Doctoreditscreen/>}/>
       </Route>
 
     </Route>

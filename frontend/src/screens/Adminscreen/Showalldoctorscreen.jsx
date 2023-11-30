@@ -48,7 +48,7 @@ const Showalldoctorscreen = () => {
      <div className="d-flex justify-content-between align-items-center">
         <h1 className="text-center mb-4 wow fadeInUp">ALL DOCTORS</h1>
         <LinkContainer to="/admin/doctor/create">
-          <Button variant="danger">Create Doctor</Button>
+          <Button variant="info">Create Doctor</Button>
         </LinkContainer>
     </div>
 
@@ -71,10 +71,14 @@ const Showalldoctorscreen = () => {
             <td>{doctor.name}</td>
             <td>{doctor.email}</td>
             <td>
+
+              <LinkContainer to= {`/admin/doctor/edit/${doctor._id}`}>
             
               <Button variant="info" onClick={() => editHandler(doctor._id)}>
                 <FontAwesomeIcon icon={faEdit} />
               </Button>
+
+              </LinkContainer>
            
             </td>
             <td>
