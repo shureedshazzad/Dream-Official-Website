@@ -109,6 +109,10 @@ const deleteDoctor = asyncHandler(async (req, res) => {
     }
   });
 
+
+
+  
+
   export{createDoctor,getDoctors,getDoctorById,updateDoctor,deleteDoctor};
   
  
