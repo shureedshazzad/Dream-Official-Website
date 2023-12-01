@@ -106,6 +106,7 @@ function Navbar() {
                      <Link to="/admin/donorInfo" className="dropdown-item">Donors Managment</Link>
                      <Link to="/admin/doctor/all" className="dropdown-item">Doctors Mangment</Link>
                      <Link to="/admin/appointment" className="dropdown-item">Appointment Managment</Link>
+                     <Link to="/admin/event/all" className="dropdown-item">Event Managment</Link>
                    </li>
                    {/* Add more admin options as needed */}
                  </ul>
@@ -130,8 +131,12 @@ function Navbar() {
             ):null
           }
 
-
-          <a href="" className="nav-item nav-link">Events And News</a>
+          {
+             !isAdmin ? (
+              <Link to="/events/all" className="nav-item nav-link" >Events</Link>
+            ):null
+          }
+       
           <li className="nav-item dropdown">
             <a className="nav-link dropdown-toggle" href="#" id="aboutUsDropdown" role a="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               About Us
