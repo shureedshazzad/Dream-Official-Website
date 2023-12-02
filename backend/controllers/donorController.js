@@ -57,107 +57,96 @@ const authDonor = asyncHandler(async (req,res) =>{
 //@access Public
 
 
-const registerDonor = asyncHandler(async (req,res) =>{
+const registerDonor = asyncHandler(async (req, res) => {
+  const {
+    name,
+    dept,
+    batch,
+    email,
+    phoneNumber,
+    bloodType,
+    currentLocation,
+    donations,
+    lastDonationDate,
+    password,
+  } = req.body;
 
-  const{ name,dept,batch,email,phoneNumber,bloodType,currentLocation,donations,lastDonationDate,password} =req.body;
-  const donorExits = await Donor.findOne({email});
-  if(donorExits){
+  const donorExists = await Donor.findOne({ email });
+  if (donorExists) {
     res.status(400);
     throw new Error('Donor already exists');
   }
 
   let isAdmin = false;
 
-  if (email === 'shazzad1907100@stud.kuet.ac.bd') {
+  if (email === 'shureedshazzad534@gmail.com') {
     isAdmin = true;
   }
 
+  const donor = await Donor.create({
+    name,
+    dept,
+    batch,
+    email,
+    phoneNumber,
+    bloodType,
+    currentLocation,
+    donations,
+    lastDonationDate,
+    password,
+    isAdmin,
+  });
 
-  const donor =await Donor.create(
-    {
-      name,
-      dept,
-      batch,
-      email,
-      phoneNumber,
-      bloodType,
-      currentLocation,
-      donations,
-      lastDonationDate,
-      password,
-      isAdmin,
-    }
-  );
-  if(donor)
-  {
-
-    // Send an email to the registered donor
-    const config = {
+  if (donor) {
+    // Send a plain text email to the registered donor
+    const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
         user: 'shureedshazzad534@gmail.com',
         pass: 'biok spxm bknr ufnc',
       },
-    };
-
-    const transporter = nodemailer.createTransport(config);
-
-
-    const MailGenerator = new Mailgen({
-      theme: 'default',
-      product: {
-        name: 'Dream Family',
-        link: 'https://mailgen.js/',
-      },
     });
 
+       // Include the Telegram link in the email message
+       const telegramLink = 'https://t.me/+daR9TtpKvoRiY2Q1';
+       const messageText = `Congratulations! You have become a member of our Dream family.
+       \n\nLook forward to doing more with you. Join our Telegram group: ${telegramLink}`;
 
-    const response = {
-      body: {
-        name: donor.name,
-        intro: 'Congratulations! You have become a member of our Dream family.',
-      },
-      outro: 'Look forward to doing more with you.',
-    };
-
-
-    const mail = MailGenerator.generate(response);
-
-    
     const message = {
       from: 'shureedshazzad534@gmail.com',
-      to:donor.email,
+      to: donor.email,
       subject: 'Dream Registration',
-      html: mail,
-    }
+      text: messageText
+    };
 
-    transporter.sendMail(message).then(() => {
-      generateToken(res, donor._id);
-      res.status(201).json({
-        _id: donor._id,
-        name: donor.name,
-        dept: donor.dept,
-        batch: donor.batch,
-        email: donor.email,
-        phoneNumber: donor.phoneNumber,
-        bloodType: donor.bloodType,
-        donations: donor.donations,
-        lastDonationDate: donor.lastDonationDate,
-        isAdmin: donor.isAdmin,
-        currentLocation:donor.currentLocation,
-        isCommitteeMember: donor.isCommitteeMember,
-        committeePost: donor.committeePost,
-        committeeImage: donor.committeeImage,
-        message: 'You should receive an email with registration confirmation.',
+    transporter.sendMail(message)
+      .then(() => {
+        generateToken(res, donor._id);
+        res.status(201).json({
+          _id: donor._id,
+          name: donor.name,
+          dept: donor.dept,
+          batch: donor.batch,
+          email: donor.email,
+          phoneNumber: donor.phoneNumber,
+          bloodType: donor.bloodType,
+          donations: donor.donations,
+          lastDonationDate: donor.lastDonationDate,
+          isAdmin: donor.isAdmin,
+          currentLocation: donor.currentLocation,
+          isCommitteeMember: donor.isCommitteeMember,
+          committeePost: donor.committeePost,
+          committeeImage: donor.committeeImage,
+          message: 'You should receive an email with registration confirmation.',
+        });
+      })
+      .catch((error) => {
+        res.status(500).json({ error });
       });
-    }).catch((error) => {
-      res.status(500).json({ error });
-    });
-  } else{
+  } else {
     res.status(400);
-    throw new Error ('Invalid user data');
+    throw new Error('Invalid user data');
   }
-
 });
 
 
@@ -260,95 +249,6 @@ const updateDonorProfile = asyncHandler(async (req, res) => {
 
 
 
-
-//@desc getDonorByID,Create Public Blood Request,and Notify Donor
-//@route POST /api/donors/:id/notify_donor
-//@access Public
-
-const findDonorByIdAndSendBloodRequest = asyncHandler(async (req, res) => {
-  const donor = await Donor.findById(req.params.id);
-
-  if (donor) {
-    const {
-      name,
-      patientProblem,
-      bloodGroup,
-      amountOfBlood,
-      deadlineForDonation,
-      contactNumber,
-      location,
-      additionalInfo,
-    } = req.body;
-
-    const publicBloodReq = await PublicBloodReq.create({
-      name,
-      patientProblem,
-      bloodGroup,
-      amountOfBlood,
-      deadlineForDonation,
-      contactNumber,
-      location,
-      additionalInfo,
-    });
-
-    // Notify via Email
-    const config = {
-      service: 'gmail',
-      auth: {
-        user: 'shureedshazzad534@gmail.com',
-        pass: 'biok spxm bknr ufnc',
-      },
-    };
-
-    const transporter = nodemailer.createTransport(config);
-
-    const MailGenerator = new Mailgen({
-      theme: 'default',
-      product: {
-        name: 'Dream Family',
-        link: 'https://mailgen.js/',
-      },
-    });
-
-    
-
-    const response = {
-      body: {
-        name: donor.name,
-        intro: 'A blood request has been created on your behalf. Please contact if you are available ',
-        problem: publicBloodReq.patientProblem,
-        bloodGroup: publicBloodReq.bloodGroup,
-        amountOfBlood: publicBloodReq.amountOfBlood,
-        deadlineForDonation: publicBloodReq.deadlineForDonation,
-        contactNumber: publicBloodReq.contactNumber,
-        location: publicBloodReq.location,
-        additionalInfo: publicBloodReq.additionalInfo,
-      },
-      outro: 'Thank you for your support.',
-    };
-
-    const mail = MailGenerator.generate(response);
-
-    const message = {
-      from: 'shureedshazzad534@gmail.com',
-      to: donor.email,
-      subject: ' Blood Request ',
-      html: mail,
-    };
-
-    transporter.sendMail(message).then(() => {
-      res.status(201).json({
-        message: 'Blood request is created successfully, and notification is sent to the donor.',
-        publicBloodReq,
-      });
-    }).catch((error) => {
-      res.status(500).json({ error });
-    });
-  } else {
-    res.status(404);
-    throw new Error('Donor not found');
-  }
-});
 
 
 
@@ -474,4 +374,4 @@ const updateDonor = asyncHandler(async (req,res) =>{
 
 
  export {authDonor,registerDonor,logoutDonor,getDonorProfile,updateDonorProfile,getDonors,deleterDonor,getDonorbyId,
-  updateDonor,findDonorByIdAndSendBloodRequest };
+  updateDonor};

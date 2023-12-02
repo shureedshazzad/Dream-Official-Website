@@ -107,14 +107,7 @@ export const donorsApiSlice = apiSlice.injectEndpoints({
         }),
 
 
-        sendDonorsRequest:builder.mutation({
-            query: ({ donorId, data }) => ({
-                url: `${DONOR_URL}/${donorId}/notify_donor`,
-                method: 'POST',
-                body: data,
-            })
-        })
-        
+       
 
       
 
@@ -129,4 +122,4 @@ export const donorsApiSlice = apiSlice.injectEndpoints({
 export const { useLoginMutation ,useLogoutMutation, useRegisterMutation, useProfileMutation
     ,useGetDonorsQuery,
     useDeleteDonorsMutation,useGetDonorDetailsQuery,useUpdateDonorMutation,useUploadCommitteeMemberImageMutation,
-useSendDonorsRequestMutation} = donorsApiSlice;
+} = donorsApiSlice;

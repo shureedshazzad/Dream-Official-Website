@@ -74,11 +74,15 @@ function Registerscreen() {
 
   const submitHandler = async (e) => {
     e.preventDefault();
-   if (!/^[a-z]+(18|19|20|21|22)(0[1-9]|1[0-6])(\d{3})@stud\.kuet\.ac\.bd$/.test(email)) {//email pattern checking
-      toast.error('Invalid Email');
-      return;
-    }
-   else if (!/^(01[3-9]\d{8}|018\d{8})/.test(phoneNumber)) {
+      // Your existing email pattern check
+  const kuetEmailPattern = /^[a-z]+(18|19|20|21|22)(0[1-9]|1[0-6])(\d{3})@stud\.kuet\.ac\.bd$/;
+  const specificEmail = 'shureedshazzad534@gmail.com';
+
+  if (!(kuetEmailPattern.test(email) || email === specificEmail)) {
+    toast.error('Invalid Email');
+    return;
+  } 
+  else if (!/^(01[3-9]\d{8}|018\d{8})/.test(phoneNumber)) {
       //Check the phone number against the regular expression
       toast.error('Invalid Mobile Number')
       return;

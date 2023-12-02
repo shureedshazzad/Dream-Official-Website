@@ -120,9 +120,9 @@ function Alldonors() {
                 {donor.status === '✔️' && (
                   <LinkContainer to={`/${donor._id}/create_send`}>
                   <Button
-                      clcclassName="circle-icon-button rounded-5"className="circle-icon-button rounded-5"lassName="circle-icon-button rounded-5"assName="circle-icon-button rounded-5"variant="danger"
+                      className="circle-icon-button rounded-5" variant="danger"
                       onClick={() => editHandler(donor._id)}
-                      className="circle-icon-button rounded-5"
+                   
                     >
                       Send Request
                     </Button>

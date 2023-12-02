@@ -44,10 +44,19 @@ export const privateBloodRequestApiSlice = apiSlice.injectEndpoints({
         invalidatesTags: ['BloodRequests'],
       }),
 
+      sendDonorsRequest:builder.mutation({
+        query: ({ donorId, data }) => ({
+            url: `${PRIVATE_BLOOD_REQ_URL}/${donorId}/notify_donor`,
+            method: 'POST',
+            body: data,
+        })
+    })
+    
+
       
     }),
   });
 
   export const {useCreateBloodRequestMutation,useGetAllBloodRequestsQuery,useGetBloodRequestByIdQuery,useDeleteBloodRequestMutation,
-    useAcceptBloodRequestMutation
+    useAcceptBloodRequestMutation,useSendDonorsRequestMutation
 } = privateBloodRequestApiSlice
