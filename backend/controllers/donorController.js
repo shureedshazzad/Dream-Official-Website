@@ -43,7 +43,6 @@ const authDonor = asyncHandler(async (req,res) =>{
       isCommitteeMember:donor.isCommitteeMember,
       committeePost:donor.committeePost,
       committeeImage:donor.committeeImage,
-      bloodReqs: donor.bloodReqs
       
     });
   }
@@ -149,7 +148,6 @@ const registerDonor = asyncHandler(async (req,res) =>{
         isCommitteeMember: donor.isCommitteeMember,
         committeePost: donor.committeePost,
         committeeImage: donor.committeeImage,
-        bloodReqs: donor.bloodReqs,
         message: 'You should receive an email with registration confirmation.',
       });
     }).catch((error) => {
@@ -203,7 +201,6 @@ const getDonorProfile = asyncHandler(async (req,res) =>{
       email: donor.email,
       phoneNumber:donor.phoneNumber,
       bloodType:donor.bloodType,
-      //bloodReqs: donor.bloodReqs, 
     });
   }
   else{
@@ -246,7 +243,6 @@ const updateDonorProfile = asyncHandler(async (req, res) => {
       isCommitteeMember:updatedDonor.isCommitteeMember,
       committeePost:updatedDonor.committeePost,
       committeeImage:updatedDonor.committeeImage,
-      bloodReqs: updatedDonor.bloodReqs
     });
   }
   else{
@@ -259,241 +255,10 @@ const updateDonorProfile = asyncHandler(async (req, res) => {
 });
 
 
-  //@desc Making a blood req
-  //@route POST/api/donors/makereq
-  //@access private
-
-  const makeBloodReq = asyncHandler(async (req, res) => {
-    const donor = await Donor.findById(req.donor._id);
-  
-    const {
-      patientProblem,
-      bloodGroup,
-      amountOfBlood,
-      deadlineForDonation,
-      contactNumber,
-      location,
-      additionalInfo,
-    } = req.body;
-  
-    try {
-      if (!donor) {
-        res.status(404);
-        throw new Error("Donor Not Found");
-      } else {
-        const bloodRequest = {
-          patientProblem,
-          bloodGroup,
-          amountOfBlood,
-          deadlineForDonation,
-          contactNumber,
-          location,
-          additionalInfo,
-        };
-  
-        donor.bloodReqs.push(bloodRequest);
-        await donor.save();
-  
-        // Notify via Telegram bot
-        const botToken = '6486965804:AAFrhv0wjmZwZrtSKSn5zlRH-WJdH-kHCI0';
-        const chatId = '-4091487083';
-  
-        const bot = new TelegramBot(botToken, { polling: false });
-  
-        const message = `
-          New Blood Donation Request:
-          Patient Problem: ${bloodRequest.patientProblem}
-          Blood Group: ${bloodRequest.bloodGroup}
-          Amount of Blood: ${bloodRequest.amountOfBlood}
-          Deadline for Donation: ${bloodRequest.deadlineForDonation}
-          Contact Number: ${bloodRequest.contactNumber}
-          Location: ${bloodRequest.location}
-          Additional Info: ${bloodRequest.additionalInfo}
-        `;
-  
-        await bot.sendMessage(chatId, message);
-  
-        if (req.body.password) {
-          donor.password = req.body.password;
-        }
-  
-        const updatedDonor = await donor.save();
-  
-        res.status(201).json({
-          message: 'Blood donation request created successfully',
-          _id: updatedDonor._id,
-          name: updatedDonor.name,
-          dept: updatedDonor.dept,
-          batch: updatedDonor.batch,
-          email: updatedDonor.email,
-          phoneNumber: updatedDonor.phoneNumber,
-          bloodType: updatedDonor.bloodType,
-          donations: updatedDonor.donations,
-          currentLocation: updatedDonor.currentLocation,
-          lastDonationDate: updatedDonor.lastDonationDate,
-          isAdmin: updatedDonor.isAdmin,
-          isCommitteeMember: updatedDonor.isCommitteeMember,
-          committeePost: updatedDonor.committeePost,
-          committeeImage: updatedDonor.committeeImage,
-          bloodReqs: updatedDonor.bloodReqs,
-        });
-      }
-    } catch (error) {
-      res.status(400);
-      throw new Error('Invalid blood donation request data');
-    }
-  });
 
 
 
 
-//@desc Delete Blood Donation Request
-//@route DELETE /api/donors/blood-req/:requestId
-//@access Private
-
-const deleteBloodReq = asyncHandler(async (req,res) =>{
-  const donor = await Donor.findById(req.donor._id);
-  if(donor){
-    const requestId = req.params.requestId;
-     // Find the index of the blood request with the given requestId
-     const bloodReqIndex = donor.bloodReqs.findIndex((req) => req._id == requestId);
-
-     if(bloodReqIndex !== -1){
-       // Remove the blood request from the array
-       donor.bloodReqs.splice(bloodReqIndex,1);
-       await donor.save();
-       if(req.body.password){
-        donor.password = req.body.password;
-      }
-       const updatedDonor = await donor.save();
-
-       res.status(201).json({
-        message: "Blood donation request deleted successfully",
-        _id: updatedDonor._id,
-        name: updatedDonor.name,
-        dept: updatedDonor.dept,
-        batch: updatedDonor.batch,
-        email: updatedDonor.email,
-        phoneNumber:updatedDonor.phoneNumber,
-        bloodType:updatedDonor.bloodType,
-        currentLocation:updatedDonor.currentLocation,
-        donations:updatedDonor.donations,
-        lastDonationDate:updatedDonor.lastDonationDate,
-        isAdmin:updatedDonor.isAdmin,
-        isCommitteeMember:updatedDonor.isCommitteeMember,
-        committeePost:updatedDonor.committeePost,
-        committeeImage:updatedDonor.committeeImage,
-        bloodReqs: updatedDonor.bloodReqs,
-      });
-     }
-     else{
-      res.status(404);
-      throw new Error("Blood donation request not found");
-     }
-  }
-  else{
-    res.status(404);
-    throw new Error("Donor not found");
-  }
-})
-
-//@desc Get Specific Blood Request By ID
-//@route GET/api/donors/blood-req/:requestId
-//@access Private
-
-const getBloodReqById = asyncHandler(async (req,res) =>{
-  const donor = await Donor.findById(req.donor._id);
-
-  if (donor) {
-    const requestId = req.params.requestId;
-
-    // Find the blood request with the given requestId
-    const bloodReq = donor.bloodReqs.find((req) => req._id == requestId);
-
-    if (bloodReq) {
-      res.status(200).json(bloodReq);
-    } else {
-      res.status(404);
-      throw new Error("Blood donation request not found");
-    }
-  } else {
-    res.status(404);
-    throw new Error("Donor not found");
-  }
-})
-
-
-
-
-
-// Update Blood Donation Request
-// PUT /api/donors/blood-req/:requestId
-// Private
-const updateBloodReq = asyncHandler(async (req, res) => {
-  const donor = await Donor.findById(req.donor._id);
-
-  if (donor) {
-    const requestId = req.params.requestId;
-    const {
-      patientProblem,
-      bloodGroup,
-      amountOfBlood,
-      deadlineForDonation,
-      contactNumber,
-      location,
-      additionalInfo,
-    } = req.body;
-
-    const bloodReqIndex = donor.bloodReqs.findIndex((req) => req._id == requestId);
-
-    if (bloodReqIndex !== -1) {
-      // Update the specific blood request
-      donor.bloodReqs[bloodReqIndex] = {
-        _id: requestId,
-        patientProblem,
-        bloodGroup,
-        amountOfBlood,
-        deadlineForDonation,
-        contactNumber,
-        location,
-        additionalInfo,
-      };
-
-      await donor.save();
-      
-      if(req.body.password){
-        donor.password = req.body.password;
-      }
-
-      const updatedDonor = await donor.save();
-
-      res.status(200).json({
-        message: "Blood donation request updated successfully",
-        _id: updatedDonor._id,
-        name: updatedDonor.name,
-        dept: updatedDonor.dept,
-        batch: updatedDonor.batch,
-        email: updatedDonor.email,
-        phoneNumber: updatedDonor.phoneNumber,
-        bloodType: updatedDonor.bloodType,
-        currentLocation:updatedDonor.currentLocation,
-        donations: updatedDonor.donations,
-        lastDonationDate: updatedDonor.lastDonationDate,
-        isAdmin: updatedDonor.isAdmin,
-        isCommitteeMember: updatedDonor.isCommitteeMember,
-        committeePost: updatedDonor.committeePost,
-        committeeImage: updatedDonor.committeeImage,
-        bloodReqs: updatedDonor.bloodReqs,
-      });
-    } else {
-      res.status(404);
-      throw new Error("Blood donation request not found");
-    }
-  } else {
-    res.status(404);
-    throw new Error("Donor not found");
-  }
-});
 
 
 //@desc getDonorByID,Create Public Blood Request,and Notify Donor
@@ -684,7 +449,6 @@ const updateDonor = asyncHandler(async (req,res) =>{
       isCommitteeMember:updatedDonor.isCommitteeMember,
       committeePost:updatedDonor.committeePost,
       committeeImage:updatedDonor.committeeImage,
-      bloodReqs: updatedDonor.bloodReqs
 
     })
   }
@@ -695,8 +459,7 @@ const updateDonor = asyncHandler(async (req,res) =>{
 });
 
 
-// @desc getDonorbyid ,create a blood requet and send message to donor
-// route
+
 
 
  
@@ -710,5 +473,5 @@ const updateDonor = asyncHandler(async (req,res) =>{
 
 
 
- export {authDonor,registerDonor,makeBloodReq,logoutDonor,getDonorProfile,updateDonorProfile,getDonors,deleterDonor,getDonorbyId,
-  updateDonor,deleteBloodReq,getBloodReqById,updateBloodReq,findDonorByIdAndSendBloodRequest };
+ export {authDonor,registerDonor,logoutDonor,getDonorProfile,updateDonorProfile,getDonors,deleterDonor,getDonorbyId,
+  updateDonor,findDonorByIdAndSendBloodRequest };

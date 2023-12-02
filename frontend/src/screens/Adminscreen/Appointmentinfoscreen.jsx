@@ -3,10 +3,13 @@ import { useParams } from 'react-router-dom';
 import Loader from '../../components/Loader';
 import { useGetAppointmentByIdQuery,useConfirmAppointmentMutation } from '../../slices/appointmentApiSlice';
 import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
 function Appointmentinfoscreen() {
 
     const { id: appointmentId } = useParams();
+
+    const navigate = useNavigate();
 
     const { data: appointment, isLoading, error } = useGetAppointmentByIdQuery(appointmentId);
 

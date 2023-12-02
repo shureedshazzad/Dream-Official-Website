@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import {  useSelector } from 'react-redux';
 import Loader from '../components/Loader';
-import {useMakeBloodReqMutation} from '../slices/donorsApiSlice';
-import { setCredentials } from '../slices/authSlice';
+import { useCreateBloodRequestMutation } from '../slices/privateBloodRequestApiSlice';
 import { toast } from 'react-toastify';
 
 
@@ -11,6 +10,8 @@ import { toast } from 'react-toastify';
 
 
 function Blooddonationreqscreen() {
+
+   const{ donorInfo } =  useSelector((state) => state.auth);
 
     const[patientProblem,setPatientProblem] = useState('');
     const[bloodGroup,setBloodGroup] = useState('');
@@ -23,12 +24,11 @@ function Blooddonationreqscreen() {
   
 
 
-    const dispatch = useDispatch();
+   
+
+    const[createPrivateBloodRequest,{isLoading}] = useCreateBloodRequestMutation();
+
     const navigate = useNavigate();
-
-    const[bloodReq,{isLoading}] = useMakeBloodReqMutation();
-
-    const{ donorInfo } =  useSelector((state) => state.auth);
 
     const { search } = useLocation();
     const sp = new URLSearchParams(search);
@@ -45,7 +45,10 @@ function Blooddonationreqscreen() {
         navigate(`/login?redirect=${redirect}`);
       
       }
+    
     }, [donorInfo, redirect, navigate]);
+    
+    
     const submitHandler = async (e) =>{
       e.preventDefault();
       if (!/^(01[3-9]\d{8}|018\d{8})/.test(contactNumber)) {
@@ -56,7 +59,8 @@ function Blooddonationreqscreen() {
      else{
       try {
         setLoading(true);
-        const res = await bloodReq({
+        const res = await createPrivateBloodRequest({
+          donor_id:donorInfo._id,
           patientProblem,
           bloodGroup,
           amountOfBlood,
@@ -65,7 +69,6 @@ function Blooddonationreqscreen() {
           location,
           additionalInfo,
         }).unwrap();
-        dispatch(setCredentials({ ...res }));
    
         console.log(res);
         toast.success('Blood Donation Request Successful');

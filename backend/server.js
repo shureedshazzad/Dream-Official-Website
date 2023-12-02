@@ -13,6 +13,7 @@ import bloodRequestRoute from './routes/bloodRequestRoute.js'
 import doctorRoutes from  './routes/doctorRoutes.js'
 import appointmentRoutes from './routes/appointmentRoutes.js'
 import eventRoutes from './routes/eventRoutes.js'
+import privateBloodRequestRoute from './routes/privateBloodRequestRoute.js'
 
 
 
@@ -44,6 +45,7 @@ app.use('/api/publicbloodrequest',bloodRequestRoute);//public blood request
 app.use('/api/doctors',doctorRoutes);//doctor routes
 app.use('/api/appointments',appointmentRoutes);
 app.use('/api/events',eventRoutes);
+app.use('/api/privateBloodRequest',privateBloodRequestRoute);
 
 const __dirname = path.resolve(); // set __dirname to current directory
 app.use('/uploads', express.static(path.join(__dirname, '/uploads')));

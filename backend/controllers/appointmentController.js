@@ -1,7 +1,8 @@
 import asyncHandler from "../middleware/asyncHandler.js";
 import Appointment from "../models/appointmentModel.js";
 import nodemailer from 'nodemailer';
-import Mailgen from 'mailgen';
+
+
 
 
 // @desc Create appointment with a specific doctor
@@ -90,10 +91,10 @@ const confirmAppointment = asyncHandler(async (req, res) => {
     await appointment.save();
 
     const textResponse = `
-      Dear ${appointment.doctor_id.name},
+      Dear Patient ,
 
       Your appointment has been confirmed for the following details:
-
+      - Doctor Name: ${appointment.doctor_id.name}
       - Date: ${new Date(appointment.appointmentDate).toLocaleDateString()}
       - Time: ${appointment.doctor_id.availableTime.startTime} - ${appointment.doctor_id.availableTime.endTime}
 

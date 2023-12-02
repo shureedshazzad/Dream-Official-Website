@@ -10,3 +10,4 @@ export const BLOOD_REQ_URL = '/api/publicbloodrequest';
 export const DOCTOR_URL = '/api/doctors';
 export const APPOINTMENT_URL = '/api/appointments';
 export const EVENT_URL = '/api/events';
+export const PRIVATE_BLOOD_REQ_URL = '/api/privateBloodRequest';
