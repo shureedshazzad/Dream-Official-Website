@@ -1,55 +1,19 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import {  faTrash } from '@fortawesome/free-solid-svg-icons';
 import { Button, Modal } from 'react-bootstrap';
-import {useGetAllBloodRequestsQuery,
-  useAcceptBloodRequestMutation
+import {
+  useGetAllBloodRequestsQuery,
+  useDeleteBloodRequestMutation,
 } from '../slices/privateBloodRequestApiSlice.js';
 import { toast } from 'react-toastify';
 import Loader from '../components/Loader';
 
-
-
-
 function BloodRequestModal({ show, onHide, request }) {
-
-  
-
-   // Create a mutation hook instance
-   const [acceptBloodReqeust, { isLoading: isLoading }] = useAcceptBloodRequestMutation();
-
- 
-
   if (!request) {
     return null;
   }
-
-  
-
-
-  const handleBloodRequestAccept = async (bloodRequstId) => {
-    try {
-;
-      // Call the mutation function
-      const result = await acceptBloodReqeust(bloodRequstId);
-
-      // Handle success, if needed
-      if (result.error) {
-        // Handle any errors returned by the mutation
-        toast.error('Failed to accept bloodRequest.');
-      } else {
-        // Handle success, if needed
-        toast.success('Blood Request is approved successfully.');
-        onHide();
-  
-      }
-    } catch (error) {
-      // Handle any unexpected errors
-      console.error('Error accepting blood request:', error);
-      toast.error('An unexpected error occurred.');
-    }
-  };
 
   return (
     <Modal show={show} onHide={onHide} centered size="lg">
@@ -57,7 +21,6 @@ function BloodRequestModal({ show, onHide, request }) {
         <Modal.Title>Blood Request Details</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <p>Request Sender:{request.donor_id.name}</p>
         <p>Patient Problem:{request.patientProblem}</p>
         <p>Blood Group: {request.bloodGroup}</p>
         <p>Amount Of Blood:{request.amountOfBlood} bags</p>
@@ -67,10 +30,7 @@ function BloodRequestModal({ show, onHide, request }) {
         <p>Location: {request.location}</p>
         <p>Additonal Info: {request.additionalInfo}</p>
       </Modal.Body>
-      <Modal.Footer className="d-flex justify-content-center">
-        <Button variant="success" onClick={() => handleBloodRequestAccept(request._id)}>
-          Accept
-        </Button>
+      <Modal.Footer>
         <Button variant="secondary" onClick={onHide}>
           Close
         </Button>
@@ -85,9 +45,19 @@ function Allbloodreqofadonorscreen() {
   const [showModal, setShowModal] = useState(false);
   const [selectedRequest, setSelectedRequest] = useState(null);
   const { data: bloodReqs = [], refetch, isLoading, error } = useGetAllBloodRequestsQuery();
+  const [deleteBloodRequest, { isLoading: isDeleting }] = useDeleteBloodRequestMutation();
 
-
-
+  const handleDeleteBloodRequest = async (bloodRequestId) => {
+    if (window.confirm('Are you sure you want to delete the blood request?')) {
+      try {
+        await deleteBloodRequest(bloodRequestId);
+        toast.success('Blood request deleted successfully');
+        refetch(); // Refetch blood requests after deletion
+      } catch (error) {
+        toast.error('Error deleting blood request');
+      }
+    }
+  };
 
   const handleShowDetails = (request) => {
     setSelectedRequest(request);
@@ -110,19 +80,27 @@ function Allbloodreqofadonorscreen() {
     }
 
     if (donorInfo) {
-      filteredReqs = filteredReqs.filter((req) => req.donor_id._id !== donorInfo._id);
+      filteredReqs = filteredReqs.filter((req) => req.donor_id._id === donorInfo._id);
     }
 
     // Filter out blood requests with a deadline that has already passed
     const currentDate = new Date();
     filteredReqs = filteredReqs.filter((req) => new Date(req.deadlineForDonation) >= currentDate);
-    // Filter requests with state other than "pending"
-    filteredReqs = filteredReqs.filter((req) => req.status == 'pending');
 
     return filteredReqs;
   };
 
-
+  const renderStatusIcon = (status) => {
+    return status === 'pending' ? (
+      <span role="img" aria-label="check-mark">
+        ❌
+      </span>
+    ) : (
+      <span role="img" aria-label="cross-mark">
+        ✅
+      </span>
+    );
+  };
 
   const circleStyle = {
     borderRadius: '50%',
@@ -172,11 +150,10 @@ function Allbloodreqofadonorscreen() {
                     <i className="fa fa-heartbeat text-danger"></i>
                   </div>
                   <h4 className="mb-3">Blood Group: {request.bloodGroup}</h4>
-                  <p>Requet Sender:{request.donor_id.name}</p>
                   <p>Deadline For Donation: {new Date(request.deadlineForDonation).toDateString()}</p>
                   <p>Contact Number: {request.contactNumber}</p>
                   <p>Location: {request.location}</p>
-             
+                  <p>Status: {renderStatusIcon(request.status)}</p>
                   <div className="d-flex justify-content-between">
                   <Button
                       variant="info"
@@ -187,6 +164,7 @@ function Allbloodreqofadonorscreen() {
                     </Button>
                     <Button
                       variant="info"
+                      onClick={() => handleDeleteBloodRequest(request._id)}
                       style={{ marginLeft: 'auto' }} // "Delete" button to the right
                     >
                       <FontAwesomeIcon icon={faTrash} />

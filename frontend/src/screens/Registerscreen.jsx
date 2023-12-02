@@ -324,7 +324,7 @@ function Registerscreen() {
 
                 <div className="col-12">
                   <button className="btn btn-danger w-100 py-3" type="submit" disabled={isLoading || loading}>
-                    Sign Up
+                    Register
                   </button>
                   {loading && <Loader />}
                 </div>

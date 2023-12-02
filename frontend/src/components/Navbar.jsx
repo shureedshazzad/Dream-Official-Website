@@ -3,7 +3,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux'; 
 import { useLogoutMutation } from '../slices/donorsApiSlice';
 import { logout } from '../slices/authSlice';
-import { BloodRequestContext } from '../screens/Otherbloodrequestsscreen';
 import { Badge } from 'react-bootstrap';
 
 
@@ -78,8 +77,7 @@ function Navbar() {
 
   const isAdmin = donorInfo && donorInfo.isAdmin;
 
-    // Use the context
-    const totalBloodRequestCount = useContext(BloodRequestContext);
+
 
   return (
     <nav className="navbar navbar-expand-lg bg-white navbar-light sticky-top p-0 wow fadeIn" data-wow-delay="0.1s">
@@ -112,7 +110,7 @@ function Navbar() {
                  </ul>
                </li>
           ) : donorInfo ? (
-            <Link to="/blood-req" className="nav-item nav-link">Create Blood Request</Link>
+            <Link to="/private-blood-req" className="nav-item nav-link">Create Blood Request</Link>
           ) : !donorInfo?(
             <Link to="/public-blood-req" className="nav-item nav-link">Create Blood Request</Link>
           ) : null
@@ -187,10 +185,7 @@ function Navbar() {
                 >
                   <Link to="/other-blood-reqs">
                   <i className="fa fa-bell"></i>
-                   {totalBloodRequestCount > 0 && (
-                    <span className="badge bg-danger ms-1">{totalBloodRequestCount}</span>
-                   )} 
-                 
+                
                     </Link>
               </button>):null}
 
@@ -215,7 +210,7 @@ function Navbar() {
 
                     {!isAdmin ?(
                     <li>
-                    <Link to = "/pending-req" className="dropdown-item">
+                    <Link to = "/all-req" className="dropdown-item">
                       Show Requests
                    </Link>
                    </li>

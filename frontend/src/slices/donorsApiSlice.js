@@ -42,39 +42,10 @@ export const donorsApiSlice = apiSlice.injectEndpoints({
         }),
 
 
-        makeBloodReq: builder.mutation({
-            query: (data) =>({
-                url: `${DONOR_URL}/make-blood-req`,
-                method: 'POST',
-                body: data,
-            })
-        }),
+      
 
-        deleteBloodReq: builder.mutation({
-            query: (requestId) =>({
-                url: `${DONOR_URL}/blood-req/${requestId}`,
-                method: "DELETE",
-            }), 
-            invalidatesTags: ["Donors"],
-        }),
-
-        getBloodReqById: builder.query({
-            query: (requestId) => ({
-              url: `${DONOR_URL}/blood-req/${requestId}`,
-            }),
-            keepUnusedDataFor: 5,
-          }),
-
-         
-          updateBloodReq: builder.mutation({
-            query: ({ requestId, data }) => ({
-              url: `${DONOR_URL}/blood-req/${requestId}`,
-              method: 'PUT',
-              body: data,
-            }),
-            invalidatesTags: ['Donors'], // Assuming 'Donors' is the tag for the donor list
-          }),
-
+     
+      
 
          
 
@@ -155,8 +126,7 @@ export const donorsApiSlice = apiSlice.injectEndpoints({
 
 
 
-export const { useLoginMutation ,useLogoutMutation, useRegisterMutation, useProfileMutation,
-    useMakeBloodReqMutation
+export const { useLoginMutation ,useLogoutMutation, useRegisterMutation, useProfileMutation
     ,useGetDonorsQuery,
     useDeleteDonorsMutation,useGetDonorDetailsQuery,useUpdateDonorMutation,useUploadCommitteeMemberImageMutation,
-useDeleteBloodReqMutation,useGetBloodReqByIdQuery,useUpdateBloodReqMutation,useSendDonorsRequestMutation} = donorsApiSlice;
+useSendDonorsRequestMutation} = donorsApiSlice;
