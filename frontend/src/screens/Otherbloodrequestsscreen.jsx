@@ -167,7 +167,7 @@ function Allbloodreqofadonorscreen() {
                 className="col-lg-4 col-md-6 wow fadeInUp"
                 data-wow-delay={`0.${index + 1}s`}
               >
-                <div className="service-item bg-light rounded h-100 p-5">
+                <div className="bg-light rounded h-100 p-5">
                   <div style={circleStyle}>
                     <i className="fa fa-heartbeat text-danger"></i>
                   </div>
@@ -179,14 +179,15 @@ function Allbloodreqofadonorscreen() {
              
                   <div className="d-flex justify-content-between">
                   <Button
-                      variant="info"
+                      rounded-5
+                      variant="success"
                       onClick={() => handleShowDetails(request)}
                       style={{ marginRight: 'auto' }} // "Show Details" button to the left
                     >
                       Show Details
                     </Button>
                     <Button
-                      variant="info"
+                      variant="danger"
                       style={{ marginLeft: 'auto' }} // "Delete" button to the right
                     >
                       <FontAwesomeIcon icon={faTrash} />

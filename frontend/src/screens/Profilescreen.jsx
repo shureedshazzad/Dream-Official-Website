@@ -236,7 +236,16 @@ const Profilescreen = () => {
               </form>
             </div>
           </div>
-          {/* The image column, similar to Loginscreen */}
+          <div className="col-lg-6 wow fadeInUp" data-wow-delay="0.5s">
+          <div className="d-flex align-items-center justify-content-center h-100">
+            <img
+              src="/images/user.jpg"
+              alt="Doctor Image"
+              className="img-fluid"
+              style={{ maxWidth: '100%', height: 'auto' }}
+            />
+          </div>
+        </div>
         </div>
       </div>
     </div>

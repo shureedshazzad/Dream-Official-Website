@@ -193,7 +193,7 @@ function Doctoreditscreen() {
         <div className="col-lg-6 wow fadeInUp" data-wow-delay="0.5s">
           <div className="d-flex align-items-center justify-content-center h-100">
             <img
-              src="/images/Doctor.jpg"
+              src="/images/doctor-2.jpg"
               alt="Doctor Image"
               className="img-fluid"
               style={{ maxWidth: '100%', height: 'auto' }}
