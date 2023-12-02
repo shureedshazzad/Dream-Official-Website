@@ -127,7 +127,7 @@ function Navbar() {
           <a href="#eligibility" className="nav-item nav-link">Pre-Donation</a>*/}
           {
              !isAdmin ? (
-              <Link to="/doctors" className="nav-item nav-link" >Doctor Appointment</Link>
+              <Link to="/medical" className="nav-item nav-link" >Kuet Medical</Link>
             ):null
           }
 

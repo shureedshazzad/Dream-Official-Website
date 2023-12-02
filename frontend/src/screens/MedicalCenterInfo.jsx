@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUserDoctor, faBed, faPhone, faUserNurse, faClock } from '@fortawesome/free-solid-svg-icons';
 import { faWhatsapp, faLinkedin } from '@fortawesome/free-brands-svg-icons';
 import { Button } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 
 const MedicalCenterInfo = () => {
   return (
@@ -37,7 +38,7 @@ const MedicalCenterInfo = () => {
       <br /><br />
       
         <div>
-         <Button className='row bg-danger' style={{ width: '100%', fontWeight: "bold" }}>Doctor Appointments</Button>
+         <Link to="/doctors"><Button className='row bg-danger' style={{ width: '100%', fontWeight: "bold" }}>Doctor Appointments</Button></Link>
         </div>
         
       </div>
