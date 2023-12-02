@@ -109,14 +109,17 @@ function Alldoctors() {
               className={`col-lg-4 col-md-6 wow fadeInUp`}
               data-wow-delay={`0.${index + 1}s`}
             >
-              <div className="service-item bg-light rounded h-100 p-5">
+              <div className="bg-light rounded h-100 p-5">
                 <div style={circleStyle}>
                   <i className="fas fa-user-md text-danger"></i>
                 </div>
                 <h4 className="mb-3">Name: {doctor.name}</h4>
                 <p>Specialized Area: {doctor.specializedArea}</p>
                 <div className="d-flex justify-content-between">
-                  <Button variant="info" onClick={() => editHandler(doctor._id)}>
+                  <Button variant="danger" 
+                  onClick={() => editHandler(doctor._id)}
+                  className="circle-icon-button rounded-5"
+                  >
                     Show Info
                   </Button>
                 </div>

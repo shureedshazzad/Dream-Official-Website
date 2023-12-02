@@ -1,24 +1,21 @@
-import React,{useState} from 'react'
-import { useGetDonorsQuery } from '../slices/donorsApiSlice'
+import React, { useState } from 'react';
+import { useGetDonorsQuery } from '../slices/donorsApiSlice';
 import Loader from '../components/Loader';
 import { Button } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import { useSelector } from 'react-redux';
 
 function Alldonors() {
-
-    const { data: donors, refetch: refetchDonors, isLoading: donorsLoading, error: donorsError } =
+  const { data: donors, refetch: refetchDonors, isLoading: donorsLoading, error: donorsError } =
     useGetDonorsQuery();
 
-    const { donorInfo } = useSelector((state) => state.auth); 
-    const [selectedBloodType, setSelectedBloodType] = useState(null);
+  const { donorInfo } = useSelector((state) => state.auth);
+  const [selectedBloodType, setSelectedBloodType] = useState(null);
 
-    const editHandler = (id) =>{
-      console.log('edit');
-    }
-  
+  const editHandler = (id) => {
+    console.log('edit');
+  };
 
-    
   if (donorsLoading) {
     return <Loader />;
   }
@@ -30,36 +27,37 @@ function Alldonors() {
   const currentDate = new Date();
 
   const filteredDonors = donors
-  .filter((donor) => donor.email !== donorInfo?.email && !donor.isAdmin &&
-  (!selectedBloodType || donor.bloodType === selectedBloodType))
-  .map((donor) => {
-    let status = '❌';
+    .filter(
+      (donor) =>
+        donor.email !== donorInfo?.email &&
+        !donor.isAdmin &&
+        (!selectedBloodType || donor.bloodType === selectedBloodType)
+    )
+    .map((donor) => {
+      let status = '❌';
 
-    if (
-      donor.lastDonationDate === null ||
-      (new Date(donor.lastDonationDate) < currentDate &&
-        monthsDiff(new Date(donor.lastDonationDate), currentDate) > 4)
-    ) {
-      status = '✔️';
-    }
+      if (
+        donor.lastDonationDate === null ||
+        (new Date(donor.lastDonationDate) < currentDate &&
+          monthsDiff(new Date(donor.lastDonationDate), currentDate) > 4)
+      ) {
+        status = '✔️';
+      }
 
-    return {
-      ...donor,
-      status,
-    };
-  });
+      return {
+        ...donor,
+        status,
+      };
+    });
 
-
-
-
-// Function to calculate the difference in months between two dates
-function monthsDiff(date1, date2) {
-  let months;
-  months = (date2.getFullYear() - date1.getFullYear()) * 12;
-  months -= date1.getMonth();
-  months += date2.getMonth();
-  return months <= 0 ? 0 : months;
-}
+  // Function to calculate the difference in months between two dates
+  function monthsDiff(date1, date2) {
+    let months;
+    months = (date2.getFullYear() - date1.getFullYear()) * 12;
+    months -= date1.getMonth();
+    months += date2.getMonth();
+    return months <= 0 ? 0 : months;
+  }
 
   const circleStyle = {
     borderRadius: '50%',
@@ -71,11 +69,6 @@ function monthsDiff(date1, date2) {
     justifyContent: 'center',
   };
 
-
-
-
-
-
   return (
     <div className="container mt-5">
       <h1 className="text-center mb-4 wow fadeInUp">Donors</h1>
@@ -83,7 +76,7 @@ function monthsDiff(date1, date2) {
       <div className="mb-4">
         <label htmlFor="bloodTypeSelect" className="form-label">
           Select Blood Type:
-        </label> 
+        </label>
         <select
           id="bloodTypeSelect"
           className="form-select"
@@ -109,11 +102,11 @@ function monthsDiff(date1, date2) {
             className={`col-lg-4 col-md-6 wow fadeInUp`}
             data-wow-delay={`0.${index + 1}s`}
           >
-            <div className="service-item bg-light rounded h-100 p-5">
-
-            <div>
-            <i className="fa fa-user" style={{ width: '30px', height: '30px', borderRadius: '50%' }}></i>
-            </div>
+         
+            <div className="bg-light rounded h-100 p-5">
+              <div>
+                <i className="fa fa-user" style={{ width: '30px', height: '30px', borderRadius: '50%' }}></i>
+              </div>
 
               <h4 className="mb-3">Name: {donor.name}</h4>
               <p>Batch: {donor.batch}</p>
@@ -124,21 +117,24 @@ function monthsDiff(date1, date2) {
               <p>Status: {donor.status}</p>
 
               <div className="text-center mt-3">
-              {donor.status === '✔️' && ( // Check if status is '✔️'
-                 <LinkContainer to={`/${donor._id}/create_send`}>
-                <Button onClick={() => editHandler(donor._id)}>
-                Send Request
-              </Button>
-             </LinkContainer>
-             )}
+                {donor.status === '✔️' && (
+                  <LinkContainer to={`/${donor._id}/create_send`}>
+                  <Button
+                      clcclassName="circle-icon-button rounded-5"className="circle-icon-button rounded-5"lassName="circle-icon-button rounded-5"assName="circle-icon-button rounded-5"variant="danger"
+                      onClick={() => editHandler(donor._id)}
+                      className="circle-icon-button rounded-5"
+                    >
+                      Send Request
+                    </Button>
+                  </LinkContainer>
+                )}
               </div>
-
             </div>
           </div>
         ))}
       </div>
     </div>
-  )
+  );
 }
 
-export default Alldonors
+export default Alldonors 
