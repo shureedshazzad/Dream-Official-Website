@@ -141,7 +141,7 @@ function Navbar() {
             </a>
             <ul className="dropdown-menu" aria-labelledby="aboutUsDropdown">
               <li>
-                <a
+                <Link to="/vision"
                   className="dropdown-item"
                   href=" "
                   style={isVisionHovered ? dropdownItemHoverStyle : dropdownItemStyle}
@@ -149,7 +149,7 @@ function Navbar() {
                   onMouseLeave={handleMouseLeaveVision}
                 >
                   Our Vision
-                </a>
+                </Link>
               </li>
               <li>
                 <Link
@@ -161,17 +161,6 @@ function Navbar() {
                 >
                   Our Team Members
                 </Link>
-              </li>
-              <li>
-                <a
-                  className="dropdown-item"
-                  href=" "
-                  style={isContactUsHovered ? dropdownItemHoverStyle : dropdownItemStyle}
-                  onMouseEnter={handleMouseEnterContactUs}
-                  onMouseLeave={handleMouseLeaveContactUs}
-                >
-                  Contact Us
-                </a>
               </li>
             </ul>
           </li>
