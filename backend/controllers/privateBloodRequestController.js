@@ -190,10 +190,133 @@ const deletePrivateBloodRequest = asyncHandler(async (req, res) => {
   });
 
 
+//@desc find a donor and send him blood request
+//@route POST /api/donors/:id/notify_donor
+//@access Private
+
+const findDonorByIdAndSendBloodRequest = asyncHandler(async(req,res) =>{
+  const receiver = await Donor.findById(req.params.id);
+  const donor = await Donor.findById(req.donor._id);
+     if(receiver){
+      const {
+        donor_id,
+        patientProblem,
+        bloodGroup,
+        amountOfBlood,
+        deadlineForDonation,
+        contactNumber,
+        location,
+        additionalInfo,
+      } = req.body;
+
+
+      const privateBloodRequest = await PrivateBloodRequest.create({
+        donor_id,
+        patientProblem,
+        bloodGroup,
+        amountOfBlood,
+        deadlineForDonation,
+        contactNumber,
+        location,
+        additionalInfo,
+      });
+
+
+
+      res.status(201).json(privateBloodRequest);
+
+      // Notify via Telegram bot
+      const botToken = '6486965804:AAFrhv0wjmZwZrtSKSn5zlRH-WJdH-kHCI0';
+      const chatId = '-4091487083';
+
+      const bot = new TelegramBot(botToken, { polling: false });
+
+      const sms = `
+        New Blood Donation Request:
+        From:${donor.name}
+        Patient Problem: ${privateBloodRequest.patientProblem}
+        Blood Group: ${privateBloodRequest.bloodGroup}
+        Amount of Blood: ${privateBloodRequest.amountOfBlood}
+        Deadline for Donation: ${privateBloodRequest.deadlineForDonation}
+        Contact Number: ${privateBloodRequest.contactNumber}
+        Location: ${privateBloodRequest.location}
+        Additional Info: ${privateBloodRequest.additionalInfo}
+      `;
+
+      await bot.sendMessage(chatId, sms)
+
+
+
+      // Configure your email transport
+      const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          user: 'shureedshazzad534@gmail.com',
+          pass: 'biok spxm bknr ufnc',
+        },
+      });
+
+
+      const textResponse = `
+      Dear ${receiver.name},
+
+      We hope this message finds you well. As a valued member of our Blood Donation Club, I am reaching out to 
+      you with an urgent request. We are currently facing a critical shortage of blood supply, 
+      and your generous contribution
+       can make a significant difference in saving lives.
+
+       These are the information:
+
+       Request Send: ${donor.name}
+       Patient Problem: ${privateBloodRequest.patientProblem}
+       Blood Group: ${privateBloodRequest.bloodGroup}
+       Amount Of Blood Required: ${privateBloodRequest.amountOfBlood}
+       Deadline For Donation: ${privateBloodRequest.deadlineForDonation}
+       Contact Number: ${privateBloodRequest.contactNumber}
+       Location: ${privateBloodRequest.location}
+       Additional Info: ${privateBloodRequest.additionalInfo}
+
+      Best regards,
+      Dream Family
+    `;
+
+
+    const message = {
+      from: 'shureedshazzad534@gmail.com', // Replace with your email
+      to: receiver.email,
+      subject: 'Urgent: Request for Blood Donation!',
+      text: textResponse, // Use text property for plain text
+    };
+
+
+
+    transporter.sendMail(message, (error, info) => {
+      if (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Error sending confirmation email' });
+      } else {
+        res.status(200).json({
+          message: 'Blood request is sent successfully',
+          bloodrequest: {
+            ...bloodrequest._doc,
+            status: 'accepted',
+          },
+        });
+      }
+    });
+  }
+   else {
+      res.status(404).json({ error: 'Blood request not found' });
+    }
+    
+})
 
 
 
 
 
 
-  export{createPrivateBloodRequest,getAllPrivateBloodRequst,getPrivateBloodRequestById,deletePrivateBloodRequest,acceptBloodRequest};
+
+
+  export{createPrivateBloodRequest,getAllPrivateBloodRequst,getPrivateBloodRequestById,deletePrivateBloodRequest,acceptBloodRequest
+  ,findDonorByIdAndSendBloodRequest};

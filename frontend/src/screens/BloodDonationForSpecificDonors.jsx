@@ -1,15 +1,16 @@
 import React,{useState} from 'react'
-import { useSendDonorsRequestMutation } from '../slices/donorsApiSlice'
+
 import { toast } from 'react-toastify';
 import Loader from '../components/Loader';
 import { useParams } from 'react-router-dom';
 import { useLocation,useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { useSendDonorsRequestMutation } from '../slices/privateBloodRequestApiSlice';
 function BloodDonationForSpecificDonors() {
 
-  const { id: IdOfDonor } = useParams();
+  const { id: idOfReceiver } = useParams();
   const { donorInfo } = useSelector((state) => state.auth); // Access donorInfo from the Redux state
-
+ 
 
   const [patientProblem, setPatientProblem] = useState('');
   const [bloodGroup, setBloodGroup] = useState('');
@@ -20,7 +21,8 @@ function BloodDonationForSpecificDonors() {
   const [additionalInfo, setAdditionalInfo] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const [createPublicBloodReq, { isLoading }] = useSendDonorsRequestMutation();
+
+  const [sendDonorsRequest, { isLoading }] = useSendDonorsRequestMutation();
 
   const navigate = useNavigate();
 
@@ -41,11 +43,13 @@ function BloodDonationForSpecificDonors() {
     try {
       setLoading(true);
 
-      // Use the createPublicBloodReq mutation
-      const res = await createPublicBloodReq({
-        donorId: IdOfDonor, // Replace with the actual donor ID
+
+
+       // Make the API request using the mutation hook
+       const res = await sendDonorsRequest({
+        donorId: idOfReceiver,
         data: {
-          name:donorInfo.name,
+          donor_id: donorInfo._id, // Assuming donorInfo has the required donor information
           patientProblem,
           bloodGroup,
           amountOfBlood,

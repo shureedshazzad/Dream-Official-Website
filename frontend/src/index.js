@@ -41,6 +41,7 @@ import Showeventbyid from './screens/Showeventbyid.jsx';
 import Eventinfo from './screens/Adminscreen/Eventinfo.jsx';
 import EventEdit from './screens/Adminscreen/EventEdit.jsx';
 import MedicalCenterInfo from './screens/MedicalCenterInfo.jsx';
+import Visionscreen from './screens/Visionscreen.jsx';
 
 
 
@@ -63,6 +64,8 @@ const router=createBrowserRouter(
       <Route path="/events/all" element={<Showallevents/>}/>
       <Route path="/events/all/:id" element={<Showeventbyid/>}/>
       <Route path="/medical" element={<MedicalCenterInfo/>}/>
+      <Route path="/vision" element={<Visionscreen/>}/>
+
 
 
       <Route path='' element={<AdminRoute/>}>
