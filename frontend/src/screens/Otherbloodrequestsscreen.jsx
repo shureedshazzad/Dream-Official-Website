@@ -17,7 +17,7 @@ function BloodRequestModal({ show, onHide, request }) {
   
 
    // Create a mutation hook instance
-   const [acceptBloodReqeust, { isLoading: isLoading }] = useAcceptBloodRequestMutation();
+   const [acceptBloodReqeust, { isLoading }] = useAcceptBloodRequestMutation();
 
  
 
@@ -68,8 +68,12 @@ function BloodRequestModal({ show, onHide, request }) {
         <p>Additonal Info: {request.additionalInfo}</p>
       </Modal.Body>
       <Modal.Footer className="d-flex justify-content-center">
-        <Button variant="success" onClick={() => handleBloodRequestAccept(request._id)}>
-          Accept
+      <Button
+          variant="success"
+          onClick={() => handleBloodRequestAccept(request._id)}
+          disabled={isLoading} // Disable the button when loading
+        >
+          {isLoading ? <Loader /> : 'Accept'}
         </Button>
         <Button variant="secondary" onClick={onHide}>
           Close
@@ -138,7 +142,7 @@ function Allbloodreqofadonorscreen() {
     <div className="container-xxl py-5" id="blood-requests">
       <div className="container">
         <div className="d-flex justify-content-between align-items-center mb-3">
-          <h1>Blood Donation Requests</h1>
+          <h1>Pending Blood Donation Requests</h1>
         </div>
         <div className="mb-3 wow fadeInUp" data-wow-delay="0.1s">
           <label>Select Blood Group:</label>

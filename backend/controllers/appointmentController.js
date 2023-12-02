@@ -101,7 +101,7 @@ const confirmAppointment = asyncHandler(async (req, res) => {
       Thank you for choosing our service.
 
       Best regards,
-      [Your Company Name]
+      Dream Family
     `;
 
     const config = {

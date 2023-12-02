@@ -5,6 +5,7 @@ import { useGetAppointmentByIdQuery,useConfirmAppointmentMutation } from '../../
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 
+
 function Appointmentinfoscreen() {
 
     const { id: appointmentId } = useParams();
@@ -30,6 +31,7 @@ function Appointmentinfoscreen() {
       } else {
         // Handle success, if needed
         toast.success('Appointment approved successfully.');
+        navigate('/admin/appointment');
       }
     } catch (error) {
       // Handle any unexpected errors
@@ -84,9 +86,13 @@ function Appointmentinfoscreen() {
             {/* Add more details as needed */}
           </ul>
           {!appointment.status && (
-               <button onClick={() => handleApproveAppointment(appointment._id)} disabled={confirmLoading}>
-                Approve
-             </button>
+             <button
+             className="btn btn-success" // Change to your preferred color (e.g., btn-primary, btn-info, etc.)
+             onClick={() => handleApproveAppointment(appointment._id)}
+             disabled={confirmLoading}
+           >
+             {confirmLoading ? <Loader size={24} /> : 'Approve'}
+           </button>
            )}
         </div>
         <div className="col-lg-6 wow fadeInUp" data-wow-delay="0.5s">

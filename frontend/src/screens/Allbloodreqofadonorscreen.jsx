@@ -116,7 +116,7 @@ function Allbloodreqofadonorscreen() {
     <div className="container-xxl py-5" id="blood-requests">
       <div className="container">
         <div className="d-flex justify-content-between align-items-center mb-3">
-          <h1>Blood Donation Requests</h1>
+          <h1>Your requests</h1>
         </div>
         <div className="mb-3 wow fadeInUp" data-wow-delay="0.1s">
           <label>Select Blood Group:</label>
@@ -145,7 +145,7 @@ function Allbloodreqofadonorscreen() {
                 className="col-lg-4 col-md-6 wow fadeInUp"
                 data-wow-delay={`0.${index + 1}s`}
               >
-                <div className="service-item bg-light rounded h-100 p-5">
+                <div className="bg-light rounded h-100 p-5">
                   <div style={circleStyle}>
                     <i className="fa fa-heartbeat text-danger"></i>
                   </div>
@@ -154,16 +154,18 @@ function Allbloodreqofadonorscreen() {
                   <p>Contact Number: {request.contactNumber}</p>
                   <p>Location: {request.location}</p>
                   <p>Status: {renderStatusIcon(request.status)}</p>
+                  
                   <div className="d-flex justify-content-between">
                   <Button
-                      variant="info"
+                      rounded-5
+                      variant="success"
                       onClick={() => handleShowDetails(request)}
                       style={{ marginRight: 'auto' }} // "Show Details" button to the left
                     >
                       Show Details
                     </Button>
                     <Button
-                      variant="info"
+                      variant="danger"
                       onClick={() => handleDeleteBloodRequest(request._id)}
                       style={{ marginLeft: 'auto' }} // "Delete" button to the right
                     >
