@@ -73,6 +73,11 @@ const donorSchema = new mongoose.Schema({
         default: false,
     },
 
+    otp: {
+        type: String,
+    },
+      
+
  
 },
 {

@@ -110,9 +110,9 @@ function Navbar() {
                  </ul>
                </li>
           ) : donorInfo ? (
-            <Link to="/private-blood-req" className="nav-item nav-link">Create Blood Request</Link>
+            <Link to="/private-blood-req" className="nav-item nav-link">Send Blood Request</Link>
           ) : !donorInfo?(
-            <Link to="/public-blood-req" className="nav-item nav-link">Create Blood Request</Link>
+            <Link to="/public-blood-req" className="nav-item nav-link">Send Blood Request</Link>
           ) : null
         }
           {

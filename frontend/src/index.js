@@ -42,6 +42,9 @@ import Eventinfo from './screens/Adminscreen/Eventinfo.jsx';
 import EventEdit from './screens/Adminscreen/EventEdit.jsx';
 import MedicalCenterInfo from './screens/MedicalCenterInfo.jsx';
 import Visionscreen from './screens/Visionscreen.jsx';
+import Otpscreen from './screens/Otpscreen.jsx';
+import Sendrecoveryemail from './screens/Sendrecoveryemail.jsx';
+import Newpasswordscreen from './screens/Newpasswordscreen.jsx';
 
 
 
@@ -65,7 +68,9 @@ const router=createBrowserRouter(
       <Route path="/events/all/:id" element={<Showeventbyid/>}/>
       <Route path="/medical" element={<MedicalCenterInfo/>}/>
       <Route path="/vision" element={<Visionscreen/>}/>
-
+      <Route path="/send-email" element={<Sendrecoveryemail/>}/>
+      <Route path="/otp/:email" element={<Otpscreen/>}/>
+      <Route path="/new-password/:email" element={<Newpasswordscreen/>} />
 
 
       <Route path='' element={<AdminRoute/>}>

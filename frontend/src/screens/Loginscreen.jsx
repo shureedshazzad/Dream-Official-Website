@@ -99,6 +99,9 @@ function Loginscreen() {
                   </div>
                   <div className="col-12">
                     <p className="mt-3">
+                      Forget Password? <Link to="/send-email">Click here to recover password</Link>
+                    </p>
+                    <p className="mt-3">
                       Not a member? <Link to={redirect ? `/register?redirect=${redirect}` : '/register'}>Be a member</Link>
                     </p>
                   </div>

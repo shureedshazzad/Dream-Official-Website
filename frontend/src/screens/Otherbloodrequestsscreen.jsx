@@ -190,12 +190,6 @@ function Allbloodreqofadonorscreen() {
                     >
                       Show Details
                     </Button>
-                    <Button
-                      variant="danger"
-                      style={{ marginLeft: 'auto' }} // "Delete" button to the right
-                    >
-                      <FontAwesomeIcon icon={faTrash} />
-                    </Button>
                   </div>
                 </div>
               </div>

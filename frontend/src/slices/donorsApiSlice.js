@@ -42,26 +42,6 @@ export const donorsApiSlice = apiSlice.injectEndpoints({
         }),
 
 
-      
-
-     
-      
-
-         
-
-
-
-        
-
-
-
-
-
-
-
-         
-
-
         getDonors:builder.query({
             query: () => ({
                 url: DONOR_URL,
@@ -107,10 +87,32 @@ export const donorsApiSlice = apiSlice.injectEndpoints({
         }),
 
 
-       
+        forgotPassword: builder.mutation({
+            query: (email) => ({
+              url: `${DONOR_URL}/forgot-password`,
+              method: 'POST',
+              body: { email },
+            }),
+          }),
 
-      
+          verifyOTP: builder.mutation({
+            query: ({ email, otp }) => ({
+              url: `${DONOR_URL}/verify-otp`,
+              method: 'POST',
+              body: { email, otp },
+            }),
+          }),
 
+
+           resetPassword : builder.mutation({
+            query: ({ email, newPassword }) => ({
+              url: `${DONOR_URL}/reset-password`,
+              method: 'POST',
+              body: { email, newPassword },
+            }),
+          }),
+
+   
             
     })
 });
@@ -121,5 +123,6 @@ export const donorsApiSlice = apiSlice.injectEndpoints({
 
 export const { useLoginMutation ,useLogoutMutation, useRegisterMutation, useProfileMutation
     ,useGetDonorsQuery,
-    useDeleteDonorsMutation,useGetDonorDetailsQuery,useUpdateDonorMutation,useUploadCommitteeMemberImageMutation,
+    useDeleteDonorsMutation,useGetDonorDetailsQuery,useUpdateDonorMutation,useUploadCommitteeMemberImageMutation,useForgotPasswordMutation,
+    useVerifyOTPMutation,useResetPasswordMutation
 } = donorsApiSlice;

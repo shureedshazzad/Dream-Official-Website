@@ -2,11 +2,10 @@
 import { error } from "console";
 import asyncHandler from "../middleware/asyncHandler.js";
 import Donor from "../models/donorModel.js";
-import PublicBloodReq from "../models/publicBloodReqModel.js";
 import generateToken from "../utils/generateToken.js";
-import TelegramBot from "node-telegram-bot-api";
 import nodemailer from 'nodemailer';
-import Mailgen from 'mailgen';
+import generateOtp from "../utils/generateOtp.js";
+
 
 
 
@@ -51,6 +50,109 @@ const authDonor = asyncHandler(async (req,res) =>{
     throw new Error('Invalid email or password');
   }
 });
+
+
+
+// @desc Forgot Password - Send OTP via Email
+// @route POST/api/donors/forgot-password
+// @access Public
+const forgotPassword = asyncHandler(async (req, res) => {
+  const { email } = req.body;
+
+  const donor = await Donor.findOne({ email });
+
+  if (donor) {
+    // Generate OTP
+    const otp = generateOtp();
+
+    // Set OTP 
+    donor.otp = otp;
+
+    await donor.save();
+
+    // Send OTP via email
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: 'shureedshazzad534@gmail.com',
+        pass: 'biok spxm bknr ufnc',
+      },
+    });
+
+    const message = {
+      from: 'shureedshazzad534@gmail.com',
+      to: donor.email,
+      subject: 'Password Recovery OTP',
+      text: `Your OTP for password recovery is: ${otp}`,
+    };
+
+    transporter.sendMail(message)
+      .then(() => {
+        res.status(200).json({ message: 'OTP sent successfully. Check your email.' });
+      })
+      .catch((error) => {
+        res.status(500).json({ error });
+      });
+  } else {
+    res.status(404).json({ error: 'Donor not found' });
+  }
+});
+
+
+// @desc Verify OTP
+// @route POST /api/donors/verify-otp
+// @access Public
+const verifyOTP = asyncHandler(async (req, res) => {
+  const { email, otp } = req.body;
+
+  const donor = await Donor.findOne({ email });
+
+  if (donor && donor.otp) {
+    const expirationTime = new Date(Date.now() + 4 * 60 * 1000); // Set expiration to 4 minutes
+
+    if (new Date() < expirationTime) {
+      if (otp === donor.otp) {
+        // OTP is valid
+        res.status(200).json({ message: 'OTP verification successful.' });
+      } else {
+        res.status(401).json({ error: 'Invalid OTP.' });
+      }
+    } else {
+      res.status(401).json({ error: 'OTP expired.' });
+    }
+  } else {
+    res.status(404).json({ error: 'Donor not found or OTP not generated.' });
+  }
+});
+
+
+
+// @desc Reset Password without OTP verification (since OTP is already verified)
+// @route POST /api/donors/reset-password
+// @access Public
+const resetPassword = asyncHandler(async (req, res) => {
+  const { email, newPassword } = req.body;
+
+  const donor = await Donor.findOne({ email });
+
+  if (donor) {
+    // Reset password
+    donor.password = newPassword;
+    donor.otp=undefined;
+    await donor.save();
+
+    res.status(200).json({ message: 'Password reset successful.' });
+  } else {
+    res.status(404).json({ error: 'Donor not found.' });
+  }
+});
+
+
+
+
+
+
+
 
 //@desc Register Donor
 //@route POST/api/donors
@@ -148,6 +250,18 @@ const registerDonor = asyncHandler(async (req, res) => {
     throw new Error('Invalid user data');
   }
 });
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -362,6 +476,13 @@ const updateDonor = asyncHandler(async (req,res) =>{
 
 
 
+
+
+
+
+
+
+
  
 
 
@@ -374,4 +495,4 @@ const updateDonor = asyncHandler(async (req,res) =>{
 
 
  export {authDonor,registerDonor,logoutDonor,getDonorProfile,updateDonorProfile,getDonors,deleterDonor,getDonorbyId,
-  updateDonor};
+  updateDonor,forgotPassword,verifyOTP,resetPassword};
