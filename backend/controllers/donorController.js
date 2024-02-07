@@ -131,14 +131,13 @@ const verifyOTP = asyncHandler(async (req, res) => {
 // @route POST /api/donors/reset-password
 // @access Public
 const resetPassword = asyncHandler(async (req, res) => {
-  const { email, newPassword } = req.body;
+  const { email, password } = req.body;
 
   const donor = await Donor.findOne({ email });
 
   if (donor) {
     // Reset password
-    donor.password = newPassword;
-    donor.otp=undefined;
+    donor.password = password;
     await donor.save();
 
     res.status(200).json({ message: 'Password reset successful.' });

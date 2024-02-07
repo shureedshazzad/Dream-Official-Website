@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState} from 'react';
 import { useNavigate, useParams,useLocation } from 'react-router-dom';
 import Loader from '../components/Loader';
 import { toast } from 'react-toastify';
@@ -6,12 +6,15 @@ import { useResetPasswordMutation } from '../slices/donorsApiSlice';
 
 function Newpasswordscreen() {
   const { email } = useParams();
+  console.log(email);
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
-  const [resetPassword, { isLoading }] = useResetPasswordMutation();
   const [passwordError, setPasswordError] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+
+
+  const [resetPassword, { isLoading }] = useResetPasswordMutation();
 
   const navigate = useNavigate();
   const { search } = useLocation();

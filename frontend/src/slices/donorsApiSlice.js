@@ -105,10 +105,10 @@ export const donorsApiSlice = apiSlice.injectEndpoints({
 
 
            resetPassword : builder.mutation({
-            query: ({ email, newPassword }) => ({
+            query: ({ email, password }) => ({
               url: `${DONOR_URL}/reset-password`,
               method: 'POST',
-              body: { email, newPassword },
+              body: { email, password },
             }),
           }),
 
