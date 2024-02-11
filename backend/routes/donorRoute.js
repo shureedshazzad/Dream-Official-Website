@@ -5,7 +5,7 @@
 import express from "express";
 const router = express.Router();
 import { authDonor,registerDonor,logoutDonor,getDonorProfile,updateDonorProfile,getDonors,deleterDonor,getDonorbyId,
-    updateDonor,forgotPassword,verifyOTP,resetPassword}
+    updateDonor,forgotPassword,verifyOTP,resetPassword,verifyOTPReg}
  from "../controllers/donorController.js";
 import { protect , admin } from "../middleware/authMiddleware.js";
 
@@ -17,6 +17,7 @@ router.route('/:id').delete(protect,admin ,deleterDonor).get(protect,admin,getDo
 router.post('/forgot-password',forgotPassword);
 router.post('/verify-otp',verifyOTP);
 router.post('/reset-password',resetPassword);
+router.post('/verify-otp-reg',verifyOTPReg);
 
 
 

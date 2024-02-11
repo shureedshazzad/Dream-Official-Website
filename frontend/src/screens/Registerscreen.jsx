@@ -1,11 +1,9 @@
 
-//phoneNumber
-import React, { useState, useEffect } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import Loader from '../components/Loader';
 import { useRegisterMutation } from '../slices/donorsApiSlice';
-import { setCredentials } from '../slices/authSlice';
 import { toast } from 'react-toastify';
 
 
@@ -28,22 +26,12 @@ function Registerscreen() {
 
   const currentDate = new Date().toISOString().split('T')[0];
 
-  const dispatch = useDispatch();
+
   const navigate = useNavigate();
 
   const [register, { isLoading }] = useRegisterMutation();
 
-  const { donorInfo } = useSelector((state) => state.auth);
-
-  const { search } = useLocation();
-  const sp = new URLSearchParams(search);
-  const redirect = sp.get('redirect') || '/';
-
-  useEffect(() => {
-    if (donorInfo) {
-      navigate(redirect);
-    }
-  }, [donorInfo, redirect, navigate]);
+ 
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -98,7 +86,7 @@ function Registerscreen() {
     else {
       try {
         setLoading(true);
-        const res = await register({
+         await register({
           name,
           dept,
           batch,
@@ -110,10 +98,7 @@ function Registerscreen() {
           currentLocation,
           password,
         }).unwrap();
-
-          dispatch(setCredentials({ ...res }));
-          navigate(redirect);
-          toast.success('Registration Successful');
+          navigate(`/otp-reg/${email}`);
       } 
       catch (err) {
         toast.error(err?.data?.message || err.error, { autoClose: 5000 });
@@ -334,7 +319,7 @@ function Registerscreen() {
                 </div>
                 <div className="col-12">
                   <p className="mt-3">
-                    Already A Member? <Link to={redirect ? `/login?redirect=${redirect}` : '/login'}>Sign In</Link>
+                    Already A Member? <Link to="/login">Sign In</Link>
                   </p>
                 </div>
               </div>

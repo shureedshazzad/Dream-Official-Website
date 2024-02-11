@@ -45,6 +45,7 @@ import Visionscreen from './screens/Visionscreen.jsx';
 import Otpscreen from './screens/Otpscreen.jsx';
 import Sendrecoveryemail from './screens/Sendrecoveryemail.jsx';
 import Newpasswordscreen from './screens/Newpasswordscreen.jsx';
+import Otpscreenforreg from './screens/Otpscreenforreg.jsx';
 
 
 
@@ -71,6 +72,7 @@ const router=createBrowserRouter(
       <Route path="/send-email" element={<Sendrecoveryemail/>}/>
       <Route path="/otp/:email" element={<Otpscreen/>}/>
       <Route path="/new-password/:email" element={<Newpasswordscreen/>} />
+      <Route path="/otp-reg/:email" element={<Otpscreenforreg/>}/>
 
 
       <Route path='' element={<AdminRoute/>}>

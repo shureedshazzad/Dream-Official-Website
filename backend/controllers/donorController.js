@@ -199,7 +199,15 @@ const registerDonor = asyncHandler(async (req, res) => {
   });
 
   if (donor) {
-    // Send a plain text email to the registered donor
+    // Generate OTP
+    const otp = generateOtp();
+
+    // Set OTP 
+    donor.otp = otp;
+
+    await donor.save();
+
+    // Send OTP via email
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
@@ -208,47 +216,101 @@ const registerDonor = asyncHandler(async (req, res) => {
       },
     });
 
-       // Include the Telegram link in the email message
-       const telegramLink = 'https://t.me/+daR9TtpKvoRiY2Q1';
-       const messageText = `Congratulations! You have become a member of our Dream family.
-       \n\nLook forward to doing more with you. Join our Telegram group: ${telegramLink}`;
-
     const message = {
       from: 'shureedshazzad534@gmail.com',
       to: donor.email,
-      subject: 'Dream Registration',
-      text: messageText
+      subject: 'Registration related OTP',
+      text: `Your OTP  is: ${otp}`,
     };
 
     transporter.sendMail(message)
       .then(() => {
-        generateToken(res, donor._id);
-        res.status(201).json({
-          _id: donor._id,
-          name: donor.name,
-          dept: donor.dept,
-          batch: donor.batch,
-          email: donor.email,
-          phoneNumber: donor.phoneNumber,
-          bloodType: donor.bloodType,
-          donations: donor.donations,
-          lastDonationDate: donor.lastDonationDate,
-          isAdmin: donor.isAdmin,
-          currentLocation: donor.currentLocation,
-          isCommitteeMember: donor.isCommitteeMember,
-          committeePost: donor.committeePost,
-          committeeImage: donor.committeeImage,
-          message: 'You should receive an email with registration confirmation.',
-        });
+        res.status(200).json({ message: 'An OTP is sent to your email. Check your email' });
       })
       .catch((error) => {
         res.status(500).json({ error });
       });
   } else {
-    res.status(400);
-    throw new Error('Invalid user data');
+    res.status(404).json({ error: 'Donor not found' });
   }
 });
+
+// @desc Verify OTP after registration
+// @route POST /api/donors/verify-otp-reg
+// @access Public
+
+const verifyOTPReg = asyncHandler(async (req, res) => {
+  const { email, otp } = req.body;
+
+  const donor = await Donor.findOne({ email });
+
+  if (!donor || !donor.otp) {
+    res.status(404).json({ error: 'Donor not found or OTP not generated.' });
+    return; // Return to prevent further execution
+  }
+
+  const expirationTime = new Date(Date.now() + 4 * 60 * 1000); // Set expiration to 4 minutes
+
+  if (new Date() >= expirationTime) {
+    res.status(401).json({ error: 'OTP expired.' });
+    await Donor.findOneAndDelete({ email }); // Delete donor since OTP expired
+    return; // Return to prevent further execution
+  }
+
+  if (otp !== donor.otp) {
+    res.status(401).json({ error: 'Invalid OTP.' });
+    await Donor.findOneAndDelete({ email }); // Delete donor since OTP is invalid
+    return; // Return to prevent further execution
+  }
+
+  // OTP is valid
+  const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: 'shureedshazzad534@gmail.com',
+      pass: 'biok spxm bknr ufnc',
+    },
+  });
+
+  const telegramLink = 'https://t.me/+daR9TtpKvoRiY2Q1';
+  const messageText = `Congratulations! You have become a member of our Dream family. Look forward to doing more with you. Join our Telegram group: ${telegramLink}`;
+
+  const message = {
+    from: 'shureedshazzad534@gmail.com',
+    to: donor.email,
+    subject: 'Dream Registration',
+    text: messageText,
+  };
+
+  transporter.sendMail(message)
+    .then(() => {
+      generateToken(res, donor._id);
+      res.status(201).json({
+        _id: donor._id,
+        name: donor.name,
+        dept: donor.dept,
+        batch: donor.batch,
+        email: donor.email,
+        phoneNumber: donor.phoneNumber,
+        bloodType: donor.bloodType,
+        donations: donor.donations,
+        lastDonationDate: donor.lastDonationDate,
+        isAdmin: donor.isAdmin,
+        currentLocation: donor.currentLocation,
+        isCommitteeMember: donor.isCommitteeMember,
+        committeePost: donor.committeePost,
+        committeeImage: donor.committeeImage,
+        otp: donor.otp,
+        message: 'You should receive an email with registration confirmation.',
+      });
+    })
+    .catch((error) => {
+      res.status(500).json({ error });
+    });
+});
+
+
+
 
 
 
@@ -494,4 +556,4 @@ const updateDonor = asyncHandler(async (req,res) =>{
 
 
  export {authDonor,registerDonor,logoutDonor,getDonorProfile,updateDonorProfile,getDonors,deleterDonor,getDonorbyId,
-  updateDonor,forgotPassword,verifyOTP,resetPassword};
+  updateDonor,forgotPassword,verifyOTP,resetPassword,verifyOTPReg};
