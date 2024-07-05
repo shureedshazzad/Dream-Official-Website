@@ -9,10 +9,6 @@ import generateOtp from "../utils/generateOtp.js";
 
 
 
-
-
-
-
 //@desc Auth Donor and get Token
 //@route POST/api/donors/login
 //@access Public
@@ -50,7 +46,6 @@ const authDonor = asyncHandler(async (req,res) =>{
     throw new Error('Invalid email or password');
   }
 });
-
 
 
 // @desc Forgot Password - Send OTP via Email
@@ -147,12 +142,6 @@ const resetPassword = asyncHandler(async (req, res) => {
 });
 
 
-
-
-
-
-
-
 //@desc Register Donor
 //@route POST/api/donors
 //@access Public
@@ -235,12 +224,17 @@ const registerDonor = asyncHandler(async (req, res) => {
   }
 });
 
+
+
+
+
+
 // @desc Verify OTP after registration
 // @route POST /api/donors/verify-otp-reg
 // @access Public
 
 const verifyOTPReg = asyncHandler(async (req, res) => {
-  const { email, otp } = req.body;
+  const { email, otp, count } = req.body;
 
   const donor = await Donor.findOne({ email });
 
@@ -249,21 +243,18 @@ const verifyOTPReg = asyncHandler(async (req, res) => {
     return; // Return to prevent further execution
   }
 
-  const expirationTime = new Date(Date.now() + 4 * 60 * 1000); // Set expiration to 4 minutes
-
-  if (new Date() >= expirationTime) {
-    res.status(401).json({ error: 'OTP expired.' });
-    await Donor.findOneAndDelete({ email }); // Delete donor since OTP expired
-    return; // Return to prevent further execution
-  }
-
-  if (otp !== donor.otp) {
+  if (count === 0) {
     res.status(401).json({ error: 'Invalid OTP.' });
     await Donor.findOneAndDelete({ email }); // Delete donor since OTP is invalid
     return; // Return to prevent further execution
   }
 
-  // OTP is valid
+  if(otp===null || otp !== donor.otp)
+  {
+    res.status(401).json({ error: 'Sorry invalid OTP. Try again' });
+  }
+
+  if(otp === donor.otp){
   const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -307,27 +298,8 @@ const verifyOTPReg = asyncHandler(async (req, res) => {
     .catch((error) => {
       res.status(500).json({ error });
     });
+  }
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
-
 
 
 //@desc Log out Donor and clear cookies
@@ -421,17 +393,6 @@ const updateDonorProfile = asyncHandler(async (req, res) => {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
 //@desc Get all donors
 //@route GET/api/donors
 //@access Private/Admin
@@ -442,11 +403,6 @@ const getDonors = asyncHandler(async (req,res) => {
  });
 
  
-
-
-
-
-
  //@desc Get donor by id
 //@route GET/api/donors/:id
 //@access Private/Admin
@@ -462,10 +418,6 @@ const getDonorbyId= asyncHandler(async (req,res) => {
       throw new Error('Resource Not Found');
   }
 });
-
-
-
-
 
 
 
@@ -489,9 +441,6 @@ const deleterDonor = asyncHandler(async (req,res) =>{
     throw new Error('Donor not found');
   }
 });
-
-
-
 
 
 
@@ -532,26 +481,6 @@ const updateDonor = asyncHandler(async (req,res) =>{
     throw new Error('Donor Not Found');
   }
 });
-
-
-
-
-
-
-
-
-
-
-
-
- 
-
-
-
-
-
-
-
 
 
 

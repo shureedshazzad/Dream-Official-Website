@@ -39,7 +39,7 @@ function Eventinfo() {
   return (
     <div className="container py-5 position-relative">
       {sortedEvents.length === 0 ? (
-        <p>No events available.</p>
+        <p>no events available.</p>
       ) : (
         <>
           <div className="row g-4">
@@ -66,13 +66,14 @@ function Eventinfo() {
               </div>
             ))}
           </div>
-          <div className="position-absolute top-0 end-0 m-3">
+        
+        </>
+      )}
+        <div className="position-absolute top-0 end-0 m-3">
             <LinkContainer to="/admin/event/create">
               <button className="btn btn-danger">Create Event</button>
             </LinkContainer>
           </div>
-        </>
-      )}
     </div>
   );
 }

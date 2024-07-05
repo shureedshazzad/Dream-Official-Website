@@ -37,6 +37,36 @@ const createPrivateBloodRequest = asyncHandler(async (req, res) => {
 
     res.status(201).json(bloodRequest);
 
+
+         // Find donors with the same blood type as the requested blood group
+         const matchingDonors = await Donor.find({ bloodType: bloodGroup });
+
+         // Notify matching donors via email
+         const transporter = nodemailer.createTransport({
+             service: 'gmail',
+             auth: {
+              user: 'shureedshazzad534@gmail.com',
+              pass: 'biok spxm bknr ufnc',
+             }
+         });
+ 
+         // Compose the email message
+         const emailPromises = matchingDonors.map(async donor => {
+             const emailMessage = {
+                 from: 'shureedshazzad534@gmail.com', // Replace with your email
+                 to: donor.email,
+                 subject: 'Blood Donation Request',
+                 text: `Dear ${donor.name},\n\nYou are receiving this email because there is a blood donation request for blood type ${bloodGroup}. Your willingness to donate could save a life.\n\nThank you for your support.\n\nBest regards,\n
+                 Dream Family`
+             };
+ 
+             // Send the email
+             return transporter.sendMail(emailMessage);
+         });
+ 
+         // Wait for all emails to be sent
+         await Promise.all(emailPromises);
+
        // Notify via Telegram bot
        const botToken = '6486965804:AAFrhv0wjmZwZrtSKSn5zlRH-WJdH-kHCI0';
        const chatId = '-4091487083';
@@ -65,8 +95,6 @@ const createPrivateBloodRequest = asyncHandler(async (req, res) => {
     }
 
   });
-
-
 
 // @desc Get all private bloodrequests
 // @route GET /api/privateBloodRequest/all
@@ -310,10 +338,6 @@ const findDonorByIdAndSendBloodRequest = asyncHandler(async(req,res) =>{
     }
     
 })
-
-
-
-
 
 
 

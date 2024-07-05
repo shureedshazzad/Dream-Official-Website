@@ -104,10 +104,10 @@ export const donorsApiSlice = apiSlice.injectEndpoints({
           }),
 
           verifyOTPReg: builder.mutation({
-            query: ({ email, otp }) => ({
+            query: ({ email, otp ,count }) => ({
               url: `${DONOR_URL}/verify-otp-reg`,
               method: 'POST',
-              body: { email, otp },
+              body: { email, otp ,count },
             }),
           }),
 
@@ -126,7 +126,6 @@ export const donorsApiSlice = apiSlice.injectEndpoints({
             
     })
 });
-
 
 
 

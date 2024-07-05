@@ -14,16 +14,9 @@ import doctorRoutes from  './routes/doctorRoutes.js'
 import appointmentRoutes from './routes/appointmentRoutes.js'
 import eventRoutes from './routes/eventRoutes.js'
 import privateBloodRequestRoute from './routes/privateBloodRequestRoute.js'
-
-
-
 const port = process.env.PORT || 5000;
-
-
 connectDB(); // connect to mongodb
-
 const app = express();
-
 // body parser middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -34,9 +27,6 @@ app.use(cookieParser());
 app.get('/', (req, res) => {
   res.send('Api is running');
 });
-
-
-
 
 
 app.use('/api/donors', donorRoute); // donorRoute
@@ -54,8 +44,3 @@ app.use(notFound);
 app.use(errorHandler);
 
 app.listen(port, () => console.log(`Sever is running on port ${port}`));
-
-
-
-
-

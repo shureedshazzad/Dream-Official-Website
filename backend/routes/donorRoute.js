@@ -19,10 +19,4 @@ router.post('/verify-otp',verifyOTP);
 router.post('/reset-password',resetPassword);
 router.post('/verify-otp-reg',verifyOTPReg);
 
-
-
-
-
-
-
 export default router;

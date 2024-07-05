@@ -5,9 +5,6 @@ import mongoose from "mongoose";
 import bcrypt from 'bcryptjs';
 
 
-
-
-
 const donorSchema = new mongoose.Schema({
     name: {
         type: String,
@@ -76,7 +73,6 @@ const donorSchema = new mongoose.Schema({
     otp: {
         type: String,
     },
-      
 
  
 },

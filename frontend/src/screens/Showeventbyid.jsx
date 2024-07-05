@@ -21,6 +21,9 @@ function Showeventbyid() {
     return <div>Error loading event details</div>;
   }
 
+  // Check if the event heading is 'Tshirt Event' or 'Hoodie Event'
+  const isSubmitVisible = event.heading === 'Tshirt Event' || event.heading === 'Hoodie Event';
+
   return (
     <div className="container py-5">
       <div className="row wow fadeInUp" data-wow-delay="0.1s">
@@ -34,6 +37,9 @@ function Showeventbyid() {
                 {new Date(event.availableday.endDate).toLocaleDateString()}
               </p>
               <p className="card-text">{event.description}</p>
+              {isSubmitVisible && (
+                <button className="btn btn-primary">Submit</button>
+              )}
             </div>
           </div>
         </div>

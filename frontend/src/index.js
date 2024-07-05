@@ -49,6 +49,7 @@ import Otpscreenforreg from './screens/Otpscreenforreg.jsx';
 
 
 
+
 const router=createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App/>}>

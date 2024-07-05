@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 const eventSchema = new mongoose.Schema({
-  // Patient information
+  
   heading: {
     type: String,
     required: true,
