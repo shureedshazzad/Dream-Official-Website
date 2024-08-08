@@ -5,6 +5,10 @@
     --dark: #1B2C51;
 }
 
+html {
+    overflow-x: hidden;
+}
+
 .fw-medium {
     font-weight: 500 !important;
 }
